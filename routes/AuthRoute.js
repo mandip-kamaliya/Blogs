@@ -1,14 +1,14 @@
 import express from "express";
-import e, { Router } from "express";
+import  { Router } from "express";
 import bcrypt from "bcrypt";
-
+import jwt from "jsonwebtoken";
 import { PrismaClient  } from "@prisma/client";
-
+import "dotenv/config"
 const router = Router();
 
 const prisma = new PrismaClient();
 
-router.post("/",async (req,res)=>{
+router.post("/register",async (req,res)=>{
     const {username , password} = req.body;
 
     if(!username || !password){
@@ -42,6 +42,40 @@ router.post("/",async (req,res)=>{
         res.status(500).json("Server Error");
   }
 
+})
+
+router.post("/login",async (req,res)=>{
+    const {username,password} = req.body;
+
+    if(!username || !password){
+        return res.status(400).json("username or password is not existed!!!");
+    }
+
+   try {
+     const user = await prisma.user.findUnique({
+         where : {username}
+     })
+     if(!user){
+        return res.status(400).json("Invalid Credientials");
+     }
+
+     const isPasswordValid  = await bcrypt.compare(password,user.password);
+     if(!isPasswordValid){
+        return res.status(400).json("Invalid password");
+     }
+
+     const token = jwt.sign(
+        {
+            userId : user.id,
+            role:user.role
+        },
+        process.env.JWT_SECRET,
+        {expiresIn:"1h"}
+     )
+   } catch (error) {
+    console.error(error);
+    res.status(500).json("server error");
+   }
 })
 
 export default router;
