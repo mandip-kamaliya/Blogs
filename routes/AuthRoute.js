@@ -1,5 +1,5 @@
 import express from "express";
-import { Router } from "express";
+import e, { Router } from "express";
 import bcrypt from "bcrypt";
 
 import { PrismaClient  } from "@prisma/client";
@@ -43,3 +43,5 @@ router.post("/",async (req,res)=>{
   }
 
 })
+
+export default router;
