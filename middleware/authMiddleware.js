@@ -18,3 +18,5 @@ const authMiddleware = (req,res,next) =>{
        return res.status(401).json("server error");
     }
 }
+
+export defaulr authMiddleware;
