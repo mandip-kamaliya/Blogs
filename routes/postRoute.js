@@ -22,17 +22,28 @@ router.post("/",authMiddleware,async (req,res)=>{
     }
 
     try {
-        const post = await prisma.post.create({
+        const newPost = await prisma.post.create({
             title,
             content,
             authorId
         });
-        res.status(201).json("new post created");
+        res.status(201).json(newPost);
 
     } catch (error) {
          res.status(500).json("server error");
     }
+})
 
+router.get("/",authMiddleware,async (req,res)=>{
+    try {
+        const posts =await prisma.post.findMany({
+            include: { author: { select: { username: true } } }, 
+            orderBy: { createdAt: 'desc' },
+        });
+        res.status(200).json(posts)
+    } catch (error) {
+        res.status(500).json("server error");
+    }
 })
 export default router;
 
