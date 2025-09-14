@@ -23,10 +23,11 @@ router.post("/",authMiddleware,async (req,res)=>{
 
     try {
         const newPost = await prisma.post.create({
+            data:{
             title,
             content,
             authorId
-        });
+        }});
         res.status(201).json(newPost);
 
     } catch (error) {
@@ -44,6 +45,21 @@ router.get("/",authMiddleware,async (req,res)=>{
     } catch (error) {
         res.status(500).json("server error");
     }
+})
+
+router.put("/:id",authMiddleware,async (req,res)=>{
+    const {title,content} = req.body;
+    const userId = req.user.userId;
+    const postId = parseInt(req.params.id);
+
+    try {
+        const updatedpost = await prisma.post.update({
+
+        })
+    } catch (error) {
+        res.status(500).json("server error");
+    }
+
 })
 export default router;
 
