@@ -53,9 +53,23 @@ router.put("/:id",authMiddleware,async (req,res)=>{
     const postId = parseInt(req.params.id);
 
     try {
-        const updatedpost = await prisma.post.update({
 
-        })
+        const post = await prisma.post.findUnique({where:{id:postId}});
+
+        if(!post){
+            return res.status(404).json("post not found");
+        }
+        if(post.authorId !== userId){
+            return res.status(403).json("FORBIDDEN:you do not have access to this post");
+        }
+        const updatedpost = await prisma.post.update({
+            where:{id:postId},
+            data:{
+                title,
+                content
+            },
+        });
+        res.status(200).json(updatedpost);
     } catch (error) {
         res.status(500).json("server error");
     }
