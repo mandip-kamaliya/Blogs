@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js",
+  provider = "prisma-client-js"
   
 }
 
@@ -25,9 +25,10 @@ model User {
   password  String
   role      Role     @default(AUTHOR)
   createdAt DateTime @default(now())
+  posts     Post[]
 }
 
-model post {
+model Post {
   id        Int      @id @default(autoincrement())
   title     String   
   content   String
