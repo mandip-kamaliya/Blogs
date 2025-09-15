@@ -85,7 +85,7 @@ router.put("/:id",authMiddleware,async (req,res)=>{
             const isAuthor = post.authorId === loggedInUser.userId;
             const isAdmin = loggedInUser.role === "ADMIN";
 
-            if(!isAuthor || !isAdmin){
+            if(!isAuthor && !isAdmin){
                 return res.status(403).json({error:'Forbidden: You do not have permission to delete this post'});
             }
             if(!post){
