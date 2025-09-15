@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
 
 const authMiddleware = (req,res,next) =>{
-    const authheader = req.header.authorization;
+    const authheader = req.headers.authorization;
 
-    if(!authheader || authheader.startsWith('Bearer')){
-        return res.status(401).json("header not available");
+    if(!authheader || !authheader.startsWith('Bearer')){
+        return res.status(401).json("Authorization token is required");
     }
 
     const token = authheader.split(" ")[1];
