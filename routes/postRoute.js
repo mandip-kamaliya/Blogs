@@ -73,6 +73,7 @@ router.put("/:id",authMiddleware,async (req,res)=>{
     } catch (error) {
         res.status(500).json("server error");
     }
+})
 
     router.delete("/:id",authMiddleware,async (req,res)=>{
         const postId = parseInt(req.params.id);
@@ -102,7 +103,7 @@ router.put("/:id",authMiddleware,async (req,res)=>{
         }
     })
 
-})
+
 export default router;
 
 
