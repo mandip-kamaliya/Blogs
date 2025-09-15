@@ -82,18 +82,17 @@ router.put("/:id",authMiddleware,async (req,res)=>{
         try {
             const post = await prisma.post.findUnique({where:{id:postId}});
 
+             if(!post){
+                return res.status(404).json("post not found");
+            }
             const isAuthor = post.authorId === loggedInUser.userId;
             const isAdmin = loggedInUser.role === "ADMIN";
 
             if(!isAuthor && !isAdmin){
                 return res.status(403).json({error:'Forbidden: You do not have permission to delete this post'});
             }
-            if(!post){
-                return res.status(404).json("post not found");
-            }
-            if(post.authorId !== userId){
-                return res.status(403).json("FORBIDDEN:you do not have access to this post");
-            }
+           
+           
             const deleted = await prisma.post.delete({
                 where:{id:postId}
             })
