@@ -83,6 +83,7 @@ router.put("/:id",authMiddleware,async (req,res)=>{
             const post = await prisma.post.findUnique({where:{id:postId}});
 
             const isAuthor = post.authorId === loggedInUser.userId;
+            const isAdmin = loggedInUser.role === "ADMIN";
             if(!post){
                 return res.status(404).json("post not found");
             }
