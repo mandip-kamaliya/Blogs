@@ -1,5 +1,5 @@
 import { Router } from "express";
-import authMiddleware from "../middleware/authmiddleware";
+import authMiddleware from "../middleware/authMiddleware.js";
 const router = Router();
 import { PrismaClient } from "@prisma/client";
 
@@ -77,9 +77,12 @@ router.put("/:id",authMiddleware,async (req,res)=>{
     router.delete("/:id",authMiddleware,async (req,res)=>{
         const postId = parseInt(req.params.id);
         const authorId = req.user.userId;
+        const loggedInUser = req.user;
 
         try {
             const post = await prisma.post.findUnique({where:{id:postId}});
+
+            const isAuthor = post.authorId === loggedInUser.userId;
             if(!post){
                 return res.status(404).json("post not found");
             }
